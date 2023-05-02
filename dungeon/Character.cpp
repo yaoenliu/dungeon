@@ -75,6 +75,10 @@ void Character::move(int x, int y) {
 void Character::print() {
 	cout <<color<< symbol<< "\033[0m";
 }
+Map* Character::getCurrentMap()
+{
+	return currentMap;
+}
 
 
 

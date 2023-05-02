@@ -24,8 +24,10 @@
 using namespace std;
 
 // function prototype
+
 void clearConsoleScreen();
 void keyUpdate();
+void setCursorPosition(int, int);
 
 // global variable
 Map* currentMap = nullptr;
@@ -34,13 +36,15 @@ bool keyPress = false;
 
 int  main()
 {
+	clearConsoleScreen();
 	Map map(30, 20, '#', ' ');
 	Map map2(20, 25, '#', ' ');
 	Map map3(30, 25, '#', ' ');
-	map.setLeft(&map2,10);
-	map2.setRight(&map,15);
-	map.setTop(&map3,10);
-	map3.setBottom(&map,20);
+	map.setLeft(&map2, 10);
+	map2.setRight(&map, 15);
+	map.setTop(&map3, 10);
+	map3.setBottom(&map, 20);
+	currentMap = &map;
 	Hero hero;
 	hero.setPos(10, 10, &map);
 	Character monster;
@@ -54,19 +58,33 @@ int  main()
 			keyUpdate();
 		if (keyPress)
 		{
+			setCursorPosition(hero.getPos().x, hero.getPos().y);
+			cout << " ";
 			if (keyState['w'] == true)
 				hero.move(0, -1);
-			if (keyState['s'] == true)
+			else if (keyState['s'] == true)
 				hero.move(0, 1);
-			if (keyState['a'] == true)
+			else if (keyState['a'] == true)
 				hero.move(-1, 0);
-			if (keyState['d'] == true)
+			else if (keyState['d'] == true)
 				hero.move(1, 0);
-			clearConsoleScreen();
-			hero .draw();
+			if (hero.getCurrentMap() != currentMap)
+			{
+				clearConsoleScreen();
+				hero.draw();
+				currentMap = hero.getCurrentMap();
+				setCursorPosition(0, 0);
+			}
+			else
+			{
+				setCursorPosition(hero.getPos().x, hero.getPos().y);
+				hero.print();
+				setCursorPosition(0, 0);
+			}			
 			keyPress = false;
 		}
 	}
+	clearConsoleScreen();
 }
 void keyUpdate()
 {
@@ -95,4 +113,12 @@ void clearConsoleScreen()
 	FillConsoleOutputCharacter(hStdOut, ' ', cellCount, coord, &count);
 	FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, cellCount, coord, &count);
 	SetConsoleCursorPosition(hStdOut, coord);
+}
+void setCursorPosition(int x, int y)
+{
+	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	std::cout.flush();
+	COORD coord = { (SHORT)x, (SHORT)y };
+	SetConsoleCursorPosition(hOut, coord);
+	// https://stackoverflow.com/questions/34842526/update-console-without-flickering-c
 }

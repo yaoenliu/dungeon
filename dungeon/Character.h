@@ -19,6 +19,7 @@ public:
 	// Getters
 	Position getPos();
 	char getSymbol();
+	Map* getCurrentMap();
 	void move(int, int);
 	// Functions
 	void print();
