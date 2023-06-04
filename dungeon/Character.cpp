@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: Character.cpp
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
@@ -10,23 +10,6 @@
 #include "Character.h"
 #include <iostream>
 using namespace std;
-void Character::setPos(Position p, Map* m) {
-	position = p;
-	currentMap = m;
-}
-void Character::setPos(int x, int y, Map* m) {
-	position.x = x;
-	position.y = y;
-	currentMap = m;
-	m->characterIn(this);
-}
-char Character::getSymbol() {
-	return symbol;
-}
-Position Character::getPos() {
-	return position;
-}
-
 void Character::move(int x, int y) {
 	if (currentMap != nullptr)
 	{
@@ -75,10 +58,5 @@ void Character::move(int x, int y) {
 void Character::print() {
 	cout <<color<< symbol<< "\033[0m";
 }
-Map* Character::getCurrentMap()
-{
-	return currentMap;
-}
-
 
 

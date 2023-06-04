@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: Map.cpp
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
@@ -16,7 +16,7 @@ Map::Map(int w, int h) {
 	height = h;
 	InitializeMap();
 }
-Map::Map(int w, int h, char wa, char f) :width(w), height(h), wall(wa), floor(f) {
+Map::Map(int w, int h, string wa, char f) :width(w), height(h), wall(wa), floor(f) {
 	InitializeMap();
 }
 void Map::draw() {
@@ -103,21 +103,21 @@ int Map::moveRequest(int x, int y)
 		return 0;
 	return 1;
 }
-void Map::characterIn(Character* c)
+void Map::characterIn(Baseobject* c)
 {
 	layout[c->getPos().y][c->getPos().x] = c;
 }
-void Map::characterOut(Character* c)
+void Map::characterOut(Baseobject* c)
 {
 	layout[c->getPos().y][c->getPos().x] = nullptr;
 }
 void Map::InitializeMap()
 {
 	// Initialize the map
-	layout = new Character * *[height];
+	layout = new Baseobject * *[height];
 	for (int i = 0; i < height; i++)
 	{
-		layout[i] = new Character * [width];
+		layout[i] = new Baseobject * [width];
 		for (int j = 0; j < width; j++)
 		{
 			layout[i][j] = nullptr;

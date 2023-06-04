@@ -1,24 +1,22 @@
 /***********************************************************************
  * File: Map.h
-  * Author: ¼BÄ£®¦
+  * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
 #pragma once
-#pragma once
 #include "Header.h"
-#include "Map.h"
 class Map
 {
 private:
 	// Map layout
-	Character*** layout = nullptr;
+	Baseobject*** layout = nullptr;
 	// Map size
 	int width;
 	int height;
-	char wall = '#';
+	std::string wall ="#";
 	char floor = ' ';
 	// Link to other maps
 	int topTrail = -1;
@@ -31,7 +29,7 @@ private:
 	Map* right = nullptr;
 public:
 	Map(int, int);
-	Map(int, int, char, char);
+	Map(int, int, std::string , char);
 	void draw();
 	void setTop(Map*, int);
 	void setBottom(Map*, int);
@@ -48,7 +46,7 @@ public:
 	int getWidth();
 	int getHeight();
 	int moveRequest(int, int);
-	void characterIn(Character *);
-	void characterOut(Character *);
+	void characterIn(Baseobject*);
+	void characterOut(Baseobject*);
 	void InitializeMap();
 };

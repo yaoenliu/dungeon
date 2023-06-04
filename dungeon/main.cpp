@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: main.cpp
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description: main function
 ***********************************************************************/
@@ -12,6 +12,7 @@
 #include <string>
 #include <conio.h>
 #include<Windows.h>
+#include <fstream>
 
 // user define library
 #include "Map.h"
@@ -37,9 +38,9 @@ bool keyPress = false;
 int  main()
 {
 	clearConsoleScreen();
-	Map map(30, 20, '#', ' ');
-	Map map2(20, 25, '#', ' ');
-	Map map3(30, 25, '#', ' ');
+	Map map(30, 20, "#", ' ');
+	Map map2(20, 25, "#", ' ');
+	Map map3(30, 25, "#", ' ');
 	map.setLeft(&map2, 10);
 	map2.setRight(&map, 15);
 	map.setTop(&map3, 10);

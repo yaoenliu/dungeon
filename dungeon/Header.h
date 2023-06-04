@@ -1,13 +1,15 @@
 /***********************************************************************
  * File: Header.h
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
 #pragma once
+#include <iostream>
 // Public headers
 class	 Map;
+class Baseobject;
 class	 Character;
 class Hero;
