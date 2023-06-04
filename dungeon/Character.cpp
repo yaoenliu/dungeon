@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: Character.cpp
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
@@ -20,7 +20,7 @@ void Character::setPos(int x, int y, Map* m) {
 	currentMap = m;
 	m->characterIn(this);
 }
-char Character::getSymbol() {
+string Character::getSymbol() {
 	return symbol;
 }
 Position Character::getPos() {

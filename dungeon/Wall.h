@@ -2,25 +2,25 @@
 #include "Header.h"
 #include "Character.h"
 
-class Hero : public Character
+class Wall : public Character
 {
 public:
-	Hero();
+	Wall();
 	void draw();
 	void print();
 private:
 
 };
-Hero::Hero()
+Wall::Wall()
 {
-	symbol = "H";
+	symbol = "■";
 	color = "\033[33m";
 }
-void Hero::print()
+void Wall::print()
 {
 	cout << color << symbol << "\033[0m";
 }
-void Hero::draw() {
+void Wall::draw() {
 	if (currentMap != nullptr)
 	{
 		currentMap->draw();

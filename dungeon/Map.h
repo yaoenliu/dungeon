@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: Map.h
-  * Author: ¼BÄ£®¦
+  * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
@@ -18,8 +18,6 @@ private:
 	// Map size
 	int width;
 	int height;
-	char wall = '#';
-	char floor = ' ';
 	// Link to other maps
 	int topTrail = -1;
 	int bottomTrail = -1;
@@ -51,4 +49,5 @@ public:
 	void characterIn(Character *);
 	void characterOut(Character *);
 	void InitializeMap();
+	void maze();
 };

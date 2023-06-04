@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: Character.h
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
@@ -18,13 +18,13 @@ public:
 	void setPos(int x, int y, Map* m);
 	// Getters
 	Position getPos();
-	char getSymbol();
+	string getSymbol();
 	void move(int, int);
 	// Functions
 	void print();
 protected:
 	Map* currentMap = nullptr;
 	Position position = { 1,1 };
-	char symbol = '@';
-	string color = "\033[31m";
+	string  symbol = "\u2588";
+	string color = "\033[0m";
 };

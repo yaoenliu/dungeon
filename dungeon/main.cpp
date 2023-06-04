@@ -1,8 +1,8 @@
-/***********************************************************************
+﻿/***********************************************************************
  * File: main.cpp
- * Author: �Bģ��
+ * Author: 劉耀恩
  * Create Date: 2023/04/28
- * Editor: �Bģ��
+ * Editor: 劉耀恩
  * Update Date: 2023/04/29
  * Description: main function
 ***********************************************************************/
@@ -12,7 +12,7 @@
 #include <string>
 #include <conio.h>
 #include<Windows.h>
-
+#include<vector>
 // user define library
 #include "Map.h"
 #include "Character.h"
@@ -22,11 +22,12 @@
 
 // global namespace
 using namespace std;
-
 // function prototype
 void clearConsoleScreen();
 void keyUpdate();
-
+void ListDirectoryContents(vector<string>&);
+int menuDraw(string* menu, int length);
+int menuDraw(vector<string> menu);
 // global variable
 Map* currentMap = nullptr;
 bool keyState[256] = { false };
@@ -34,18 +35,91 @@ bool keyPress = false;
 
 int  main()
 {
-	Map map(30, 20, '#', ' ');
-	Map map2(20, 25, '#', ' ');
-	Map map3(30, 25, '#', ' ');
-	map.setLeft(&map2,10);
-	map2.setRight(&map,15);
-	map.setTop(&map3,10);
-	map3.setBottom(&map,20);
+	string gamefile;
+	string menu[3] = { "new game","load game","exit" };
+	int menuIndex = 0;
+	while (1)
+	{
+		clearConsoleScreen();
+		for (int i = 0; i < 3; i++)
+		{
+			if (i == menuIndex)
+				cout << "[■]";
+			else
+				cout << "[ ]";
+			cout << menu[i] << endl;
+		}
+		char c = _getch();
+		if (c == 'w' && menuIndex > 0)
+			menuIndex--;
+		if (c == 's' && menuIndex < 2)
+			menuIndex++;
+		if (c == '\r')
+		{
+			if (menuIndex == 0)
+			{
+				string level[3] = { "level1","level2","level3" };
+				string * levelPtr = level;
+				int levelIndex = menuDraw(levelPtr, 3);
+				if (levelIndex == -1)
+					continue;
+				else
+				{
+					gamefile = level[levelIndex];
+					break;
+				}					
+			}
+			else if (menuIndex == 1)
+			{
+				vector<string> saveList;
+				ListDirectoryContents(saveList);
+				int saveIndex = menuDraw(saveList);
+				if (saveIndex == -1)
+					continue;
+				else
+				{
+					gamefile = saveList[saveIndex];
+					break;
+				}
+			}
+			else if (menuIndex == 2)
+			{
+				return 0;
+			}
+		}
+	}
 	Hero hero;
-	hero.setPos(10, 10, &map);
-	Character monster;
-	monster.setPos(15, 15, &map);
-	map.draw();
+	if (gamefile == "level1")
+	{
+		Map * map = new Map(11, 11);
+		currentMap = map;
+		map->maze();
+		hero.setPos (1,1,currentMap);
+		clearConsoleScreen();
+		hero.draw();
+	}
+	if (gamefile == "level2")
+	{
+		Map* map = new Map(21, 21);
+		currentMap = map;
+		map->maze();
+		hero.setPos(1, 1, currentMap);
+		clearConsoleScreen();
+		hero.draw();
+	}
+	if (gamefile == "level3")
+	{
+		Map* map = new Map(31, 31);
+		currentMap = map;
+		map->maze();
+		hero.setPos(1, 1, currentMap);
+		clearConsoleScreen();
+		hero.draw();
+	}
+	else
+	{
+
+	}
 	Timer timer(1);
 	timer.start();
 	while (keyState[27] == false)
@@ -63,10 +137,11 @@ int  main()
 			if (keyState['d'] == true)
 				hero.move(1, 0);
 			clearConsoleScreen();
-			hero .draw();
+			hero.draw();
 			keyPress = false;
 		}
 	}
+
 }
 void keyUpdate()
 {
@@ -95,4 +170,79 @@ void clearConsoleScreen()
 	FillConsoleOutputCharacter(hStdOut, ' ', cellCount, coord, &count);
 	FillConsoleOutputAttribute(hStdOut, csbi.wAttributes, cellCount, coord, &count);
 	SetConsoleCursorPosition(hStdOut, coord);
+}
+
+void ListDirectoryContents(vector<string>& saveList)
+{
+	saveList.clear ();
+	WIN32_FIND_DATAA fileData;
+	HANDLE hFind = INVALID_HANDLE_VALUE;
+	std::string searchPath = "./save/*.sav";
+	hFind = FindFirstFileA(searchPath.c_str(), &fileData);
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			saveList.push_back(fileData.cFileName);
+		} while (FindNextFileA(hFind, &fileData) != 0);
+		FindClose(hFind);
+	}
+}
+
+int menuDraw(string* menu, int length)
+{
+	int menuIndex = -1;
+	while (true)
+	{
+		clearConsoleScreen();
+		for (int i = -1; i < length; i++)
+		{
+			if (i == menuIndex)
+				cout << "[■]";
+			else
+				cout << "[ ]";
+			if(i!=-1)
+				cout << menu[i] << endl;
+			else 
+				cout << "Back" << endl;
+		}
+		char c = _getch();
+		if (c == 'w' && menuIndex > -1)
+			menuIndex--;
+		if (c == 's' && menuIndex < length - 1)
+			menuIndex++;
+		if (c == '\r')
+		{
+			return menuIndex;
+		}
+	}
+}
+int menuDraw(vector<string> menu)
+{
+	int menuIndex = -1;
+	int length = menu.size();
+	while (true)
+	{
+		clearConsoleScreen();
+		for (int i = -1; i < length; i++)
+		{
+			if (i == menuIndex)
+				cout << "[■]";
+			else
+				cout << "[ ]";
+			if (i != -1)
+				cout << menu[i] << endl;
+			else
+				cout << "Back" << endl;
+		}
+		char c = _getch();
+		if (c == 'w' && menuIndex > -1)
+			menuIndex--;
+		if (c == 's' && menuIndex < length-1)
+			menuIndex++;
+		if (c == '\r')
+		{
+			return menuIndex;
+		}
+	}
 }

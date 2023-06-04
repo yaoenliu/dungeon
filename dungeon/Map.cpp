@@ -1,22 +1,21 @@
 /***********************************************************************
  * File: Map.cpp
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/28
- * Editor: ¼BÄ£®¦
+ * Editor: åŠ‰è€€æ©
  * Update Date: 2023/04/29
  * Description:
 ***********************************************************************/
 #include "Character.h"
 #include "Map.h"
+#include "maze.h"
 #include <iostream>
-#define Mapwallmode 1 // set to 1 if the map size includes the walls
+#define Mapwallmode 0 // set to 1 if the map size includes the walls
+
 using namespace std;
 Map::Map(int w, int h) {
 	width = w;
 	height = h;
-	InitializeMap();
-}
-Map::Map(int w, int h, char wa, char f) :width(w), height(h), wall(wa), floor(f) {
 	InitializeMap();
 }
 void Map::draw() {
@@ -24,18 +23,10 @@ void Map::draw() {
 	{
 		for (int j = 0; j < width; j++)
 		{
-			if (i == 0 && topTrail != j)
-				cout << wall;
-			else if (i == height - 1 && bottomTrail != j)
-				cout << wall;
-			else if (j == 0 && leftTrail != i)
-				cout << wall;
-			else if (j == width - 1 && rightTrail != i)
-				cout << wall;
-			else if (layout[i][j] != nullptr)
+			if (layout[i][j] != nullptr)
 				layout[i][j]->print();
 			else
-				cout << floor;
+				cout <<" ";
 		}
 		cout << endl;
 	}
@@ -97,7 +88,7 @@ int Map::moveRequest(int x, int y)
 	{
 		return -1;
 	}
-	if (x < 0 +Mapwallmode|| x >= width - Mapwallmode || y < 0 + Mapwallmode || y >= height - Mapwallmode)
+	if (x < 0 + Mapwallmode || x >= width - Mapwallmode || y < 0 + Mapwallmode || y >= height - Mapwallmode)
 		return 0;
 	if (layout[y][x] != nullptr)
 		return 0;
@@ -147,5 +138,22 @@ int Map::getWidth()
 int Map::getHeight()
 {
 	return height;
+}
+
+void Map::maze()
+{
+	int** board = new int* [height];
+	for (int i = 0; i < height; i++)
+		board[i] = new int[width];
+	gen(board, height - 2, width - 2);
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++) {
+			if (board[i][j] == 2)
+				layout[i][j] = nullptr;
+			else
+				layout[i][j] = new Character();
+		}
+	}
 }
 
