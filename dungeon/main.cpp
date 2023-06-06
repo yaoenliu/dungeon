@@ -13,12 +13,16 @@
 #include <conio.h>
 #include<Windows.h>
 #include<vector>
+
 // user define library
 #include "Map.h"
 #include "Character.h"
 #include "Position.h"
 #include "Timer.h"
 #include "Hero.h"
+#include  "Triger.h"
+#include "HeroSta.h"
+#include "Enemy.h"
 
 // global namespace
 using namespace std;
@@ -26,13 +30,22 @@ using namespace std;
 void clearConsoleScreen();
 void keyUpdate();
 void ListDirectoryContents(vector<string>&);
+void setCursorPosition(int x, int y);
+void save(Hero hero);
+void healT(int n);
+void expT(int n);
+void eneV(int);
+void eneV2(int);
 int menuDraw(string* menu, int length);
 int menuDraw(vector<string> menu);
 // global variable
 Map* currentMap = nullptr;
 bool keyState[256] = { false };
 bool keyPress = false;
-
+vector <Triger*> trigerList;
+vector <Triger*> healList;
+vector <Enemy*> enemyList;
+vector <Enemy*> enemy2List;
 int  main()
 {
 	string gamefile;
@@ -59,7 +72,7 @@ int  main()
 			if (menuIndex == 0)
 			{
 				string level[3] = { "level1","level2","level3" };
-				string * levelPtr = level;
+				string* levelPtr = level;
 				int levelIndex = menuDraw(levelPtr, 3);
 				if (levelIndex == -1)
 					continue;
@@ -67,7 +80,7 @@ int  main()
 				{
 					gamefile = level[levelIndex];
 					break;
-				}					
+				}
 			}
 			else if (menuIndex == 1)
 			{
@@ -91,14 +104,18 @@ int  main()
 	Hero hero;
 	if (gamefile == "level1")
 	{
-		Map * map = new Map(11, 11);
+		Map* map = new Map(11, 11);
 		currentMap = map;
 		map->maze();
-		hero.setPos (1,1,currentMap);
+		hero.setPos(1, 1, currentMap);
 		clearConsoleScreen();
 		hero.draw();
+		expT(2);
+		healT(2);
+		eneV(2);
+		eneV2(2);
 	}
-	if (gamefile == "level2")
+	else if (gamefile == "level2")
 	{
 		Map* map = new Map(21, 21);
 		currentMap = map;
@@ -106,8 +123,12 @@ int  main()
 		hero.setPos(1, 1, currentMap);
 		clearConsoleScreen();
 		hero.draw();
+		expT(4);
+		healT(4);
+		eneV(4);
+		eneV2(4);
 	}
-	if (gamefile == "level3")
+	else if (gamefile == "level3")
 	{
 		Map* map = new Map(31, 31);
 		currentMap = map;
@@ -115,10 +136,21 @@ int  main()
 		hero.setPos(1, 1, currentMap);
 		clearConsoleScreen();
 		hero.draw();
+		expT(8);
+		healT(8);
+		eneV(8);
+		eneV2(8);
 	}
 	else
 	{
-
+		currentMap = new Map();
+		HeroSta hStatus = currentMap->load("./save/" + gamefile, healList, trigerList, enemyList, enemy2List);
+		hero.setPos(hStatus.pos, currentMap);
+		hero.setExp( hStatus.exp);
+		hero.setHp(hStatus.hp);
+		hero.setLevel(hStatus.level);
+		clearConsoleScreen();
+		hero.draw();
 	}
 	Timer timer(1);
 	timer.start();
@@ -136,9 +168,54 @@ int  main()
 				hero.move(-1, 0);
 			if (keyState['d'] == true)
 				hero.move(1, 0);
+			if (keyState['m'] == true)
+				save(hero);
+
+			for (int i = 0; i < trigerList.size(); i++)
+				if (hero.getPos().x == trigerList[i]->getPos().x && hero.getPos().y == trigerList[i]->getPos().y)
+					hero.gotExp(10);
+			for (int i = 0; i < healList.size(); i++)
+				if (hero.getPos().x == healList[i]->getPos().x && hero.getPos().y == trigerList[i]->getPos().y)
+					hero.gotHp(10);
+			for (int i = 0; i < enemyList.size(); i++)
+			{
+				if (hero.getPos().x == enemyList[i]->getPos().x && hero.getPos().y == enemyList[i]->getPos().y)
+				{
+					hero.gotHp(-40);
+					delete enemyList[i];
+					enemyList.erase(enemyList.begin() + i);
+				}
+			}
+			for (int i = 0; i < enemy2List.size(); i++)
+			{
+				if (hero.getPos().x == enemy2List[i]->getPos().x && hero.getPos().y == enemy2List[i]->getPos().y)
+				{
+					hero.gotHp(-10);
+					delete enemy2List[i];
+					enemy2List.erase(enemy2List.begin() + i);
+					eneV2(1);					
+				}
+			}
+			for (int i = 0; i < enemyList.size(); i++)
+			{
+				int x = rand() % 3 - 1;
+				int y = rand() % 3 - 1;
+				enemyList[i]->move(x, y);
+			}
 			clearConsoleScreen();
 			hero.draw();
+			for (int i = 0; i < trigerList.size(); i++)
+			{
+				setCursorPosition(trigerList[i]->getX(), trigerList[i]->getY());
+				cout << trigerList[i]->getSymbol();
+			}
+			for (int i = 0; i < healList.size(); i++)
+			{
+				setCursorPosition(healList[i]->getX(), trigerList[i]->getY());
+				cout << healList[i]->getSymbol();
+			}
 			keyPress = false;
+			setCursorPosition(0, 3 + currentMap->getHeight());
 		}
 	}
 
@@ -174,7 +251,7 @@ void clearConsoleScreen()
 
 void ListDirectoryContents(vector<string>& saveList)
 {
-	saveList.clear ();
+	saveList.clear();
 	WIN32_FIND_DATAA fileData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
 	std::string searchPath = "./save/*.sav";
@@ -201,9 +278,9 @@ int menuDraw(string* menu, int length)
 				cout << "[■]";
 			else
 				cout << "[ ]";
-			if(i!=-1)
+			if (i != -1)
 				cout << menu[i] << endl;
-			else 
+			else
 				cout << "Back" << endl;
 		}
 		char c = _getch();
@@ -238,11 +315,104 @@ int menuDraw(vector<string> menu)
 		char c = _getch();
 		if (c == 'w' && menuIndex > -1)
 			menuIndex--;
-		if (c == 's' && menuIndex < length-1)
+		if (c == 's' && menuIndex < length - 1)
 			menuIndex++;
 		if (c == '\r')
 		{
 			return menuIndex;
 		}
+	}
+}
+void save(Hero hero)
+{
+	clearConsoleScreen();
+	cout << "Enter save name: ";
+	string saveName;
+	cin >> saveName;
+	HeroSta heroSta = { hero.getPos(), hero.getHp(), hero.getExp(), hero.getLevel() };
+	currentMap->save("./save/" + saveName + ".sav", healList, trigerList, enemyList, enemy2List, heroSta);
+}
+
+void setCursorPosition(int x, int y)
+{
+	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	std::cout.flush();
+	COORD coord = { (SHORT)x, (SHORT)y };
+	SetConsoleCursorPosition(hOut, coord);
+	// https://stackoverflow.com/questions/34842526/update-console-without-flickering-c
+}
+
+void healT(int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		Triger* triger = new Triger();
+		int max = currentMap->getWidth();
+		int x = rand() % max;
+		int y = rand() % max;
+		while (!currentMap->inRequest(x, y))
+		{
+			x = rand() % max;
+			y = rand() % max;
+		}
+		triger->setPos(x, y);
+		triger->setSymbol("\033[32m+\033[0m");
+		healList.push_back(triger);
+	}
+}
+
+void expT(int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		Triger* triger = new Triger();
+		int max = currentMap->getWidth();
+		int x = rand() % max;
+		int y = rand() % max;
+		while (!currentMap->inRequest(x, y))
+		{
+			x = rand() % max;
+			y = rand() % max;
+		}
+		triger->setPos(x, y);
+		triger->setSymbol("\033[36mT\033[0m");
+		trigerList.push_back(triger);
+	}
+}
+
+void eneV(int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		Enemy * enemy = new Enemy();
+		int max = currentMap->getWidth();
+		int x = rand() % max;
+		int y = rand() % max;
+		while (!currentMap->moveRequest(x, y))
+		{
+			x = rand() % max;
+			y = rand() % max;
+		}
+		enemy->setPos (x, y , currentMap);
+		enemy->setSymbol("\033[31mE\033[0m");
+		enemyList.push_back(enemy);
+	}
+}
+void eneV2(int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		Enemy* enemy = new Enemy();
+		int max = currentMap->getWidth();
+		int x = rand() % max;
+		int y = rand() % max;
+		while (!currentMap->moveRequest(x, y))
+		{
+			x = rand() % max;
+			y = rand() % max;
+		}
+		enemy->setPos(x, y, currentMap);
+		enemy->setSymbol("\033[31mX\033[0m");
+		enemy2List.push_back(enemy);
 	}
 }

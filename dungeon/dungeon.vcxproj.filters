@@ -27,6 +27,9 @@
     <ClCompile Include="maze.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Triger.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ccs.h">
@@ -51,6 +54,15 @@
       <Filter>標頭檔</Filter>
     </ClInclude>
     <ClInclude Include="maze.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Triger.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroSta.h">
+      <Filter>標頭檔</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
       <Filter>標頭檔</Filter>
     </ClInclude>
   </ItemGroup>

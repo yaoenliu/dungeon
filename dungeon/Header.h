@@ -11,3 +11,5 @@
 class	 Map;
 class	 Character;
 class Hero;
+#include "Position.h"
+#include "HeroSta.h"
