@@ -36,6 +36,7 @@ void healT(int n);
 void expT(int n);
 void eneV(int);
 void eneV2(int);
+void updateScreen();
 int menuDraw(string* menu, int length);
 int menuDraw(vector<string> menu);
 // global variable
@@ -104,12 +105,9 @@ int  main()
 	Hero hero;
 	if (gamefile == "level1")
 	{
-		Map* map = new Map(11, 11);
-		currentMap = map;
-		map->maze();
+		currentMap = new Map(11, 11);
+		currentMap->maze();
 		hero.setPos(1, 1, currentMap);
-		clearConsoleScreen();
-		hero.draw();
 		expT(2);
 		healT(2);
 		eneV(2);
@@ -117,12 +115,9 @@ int  main()
 	}
 	else if (gamefile == "level2")
 	{
-		Map* map = new Map(21, 21);
-		currentMap = map;
-		map->maze();
+		currentMap = new Map(21, 21);
+		currentMap->maze();
 		hero.setPos(1, 1, currentMap);
-		clearConsoleScreen();
-		hero.draw();
 		expT(4);
 		healT(4);
 		eneV(4);
@@ -130,12 +125,9 @@ int  main()
 	}
 	else if (gamefile == "level3")
 	{
-		Map* map = new Map(31, 31);
-		currentMap = map;
-		map->maze();
+		currentMap = new Map(31, 31);
+		currentMap->maze();
 		hero.setPos(1, 1, currentMap);
-		clearConsoleScreen();
-		hero.draw();
 		expT(8);
 		healT(8);
 		eneV(8);
@@ -149,11 +141,12 @@ int  main()
 		hero.setExp( hStatus.exp);
 		hero.setHp(hStatus.hp);
 		hero.setLevel(hStatus.level);
-		clearConsoleScreen();
-		hero.draw();
 	}
 	Timer timer(1);
 	timer.start();
+	clearConsoleScreen();
+	hero.draw();
+	updateScreen();
 	while (keyState[27] == false)
 	{
 		if (timer.tick())
@@ -204,18 +197,18 @@ int  main()
 			}
 			clearConsoleScreen();
 			hero.draw();
-			for (int i = 0; i < trigerList.size(); i++)
-			{
-				setCursorPosition(trigerList[i]->getX(), trigerList[i]->getY());
-				cout << trigerList[i]->getSymbol();
-			}
-			for (int i = 0; i < healList.size(); i++)
-			{
-				setCursorPosition(healList[i]->getX(), trigerList[i]->getY());
-				cout << healList[i]->getSymbol();
-			}
+			updateScreen();
 			keyPress = false;
-			setCursorPosition(0, 3 + currentMap->getHeight());
+			if (hero.getHp() <= 0)
+			{
+				cout << "You died" << endl;
+				return 886;
+			}
+			if (hero.getLevel() >= 10)
+			{
+				cout << "You win" << endl;
+				return 777;
+			}
 		}
 	}
 
@@ -348,8 +341,8 @@ void healT(int n)
 	{
 		Triger* triger = new Triger();
 		int max = currentMap->getWidth();
-		int x = rand() % max;
-		int y = rand() % max;
+		int x = 0;
+		int y = 0;
 		while (!currentMap->inRequest(x, y))
 		{
 			x = rand() % max;
@@ -367,8 +360,8 @@ void expT(int n)
 	{
 		Triger* triger = new Triger();
 		int max = currentMap->getWidth();
-		int x = rand() % max;
-		int y = rand() % max;
+		int x = 0;
+		int y = 0;
 		while (!currentMap->inRequest(x, y))
 		{
 			x = rand() % max;
@@ -386,8 +379,8 @@ void eneV(int n)
 	{
 		Enemy * enemy = new Enemy();
 		int max = currentMap->getWidth();
-		int x = rand() % max;
-		int y = rand() % max;
+		int x = 0;
+		int y = 0;
 		while (!currentMap->moveRequest(x, y))
 		{
 			x = rand() % max;
@@ -404,8 +397,8 @@ void eneV2(int n)
 	{
 		Enemy* enemy = new Enemy();
 		int max = currentMap->getWidth();
-		int x = rand() % max;
-		int y = rand() % max;
+		int x = 0;
+		int y = 0;
 		while (!currentMap->moveRequest(x, y))
 		{
 			x = rand() % max;
@@ -415,4 +408,19 @@ void eneV2(int n)
 		enemy->setSymbol("\033[31mX\033[0m");
 		enemy2List.push_back(enemy);
 	}
+}
+
+void updateScreen ()
+{
+	for (int i = 0; i < trigerList.size(); i++)
+	{
+		setCursorPosition(trigerList[i]->getX(), trigerList[i]->getY());
+		cout << trigerList[i]->getSymbol();
+	}
+	for (int i = 0; i < healList.size(); i++)
+	{
+		setCursorPosition(healList[i]->getX(), trigerList[i]->getY());
+		cout << healList[i]->getSymbol();
+	}
+	setCursorPosition(0, 5 + currentMap->getHeight());
 }

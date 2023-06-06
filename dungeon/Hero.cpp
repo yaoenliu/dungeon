@@ -24,6 +24,8 @@ void Hero::draw() {
 		cout << "HP: " << getHp() << endl;
 		cout << "EXP: " << getExp() << endl;
 		cout << "LV: " << getLevel() << endl;
+		cout << "Press 'w' to go up, 's' to go down, 'a' to go left, 'd' to go right, 'esc' to quit" << endl;
+		cout << "Press m to save the game" << endl; 
 	}
 }
 void Hero::gotExp(int exp)
@@ -48,27 +50,27 @@ void Hero::gotHp(int hp)
 		this->hp = 100;
 	}
 }
-int Hero::getHp() 
-{ 
-	return hp; 
+int Hero::getHp()
+{
+	return hp;
 }
 int Hero::getExp()
-{ 
-	return exp; 
+{
+	return exp;
 }
 int Hero::getLevel()
 {
 	return level;
 }
 void Hero::setHp(int hp)
-{ 
-	this->hp = hp; 
+{
+	this->hp = hp;
 }
 void Hero::setExp(int exp)
-{ 
-	this->exp = exp; 
+{
+	this->exp = exp;
 }
 void Hero::setLevel(int level)
-{ 
-	this->level = level; 
+{
+	this->level = level;
 }

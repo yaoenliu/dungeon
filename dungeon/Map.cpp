@@ -14,7 +14,7 @@
 #include <iostream>
 #include<fstream>
 
-#define Mapwallmode 0 // set to 1 if the map size includes the walls
+#define Mapwallmode 1 // set to 1 if the map size includes the walls
 
 using namespace std;
 Map::Map()
@@ -106,10 +106,12 @@ int Map::moveRequest(int x, int y)
 int Map::inRequest(int x, int y)
 {
 	if (x < 0 + Mapwallmode || x >= width - Mapwallmode || y < 0 + Mapwallmode || y >= height - Mapwallmode)
-		return 0;
-	if (layout[y][x] != nullptr)
-		return 0;
-	return 1;
+		return false;
+	else if (layout[y][x] == nullptr)
+		return true;
+	else
+		return false;
+
 }
 void Map::characterIn(Character* c)
 {
@@ -169,13 +171,16 @@ void Map::maze()
 			if (board[i][j] == 2)
 				layout[i][j] = nullptr;
 			else
+			{
 				layout[i][j] = new Character();
+			}				
 		}
 	}
 }
 
 void Map::save(string filePath, vector<Triger*> heal, vector<Triger*> exp, vector<Enemy*> enemy, vector<Enemy*> enemy2, HeroSta sta)
 {
+	system("mkdir save");
 	ofstream file;
 	file.open(filePath);
 	file << width << " " << height << endl;
@@ -217,7 +222,7 @@ void Map::save(string filePath, vector<Triger*> heal, vector<Triger*> exp, vecto
 	file.close();
 }
 
-HeroSta Map::load(string filePath, vector<Triger*>& heal, vector<Triger*>& exp, vector<Enemy*> &enemy, vector<Enemy*> &enemy2)
+HeroSta Map::load(string filePath, vector<Triger*>& heal, vector<Triger*>& exp, vector<Enemy*>& enemy, vector<Enemy*>& enemy2)
 {
 	ifstream file;
 	file.open(filePath);
@@ -264,7 +269,7 @@ HeroSta Map::load(string filePath, vector<Triger*>& heal, vector<Triger*>& exp, 
 		else if (c == 'E')
 		{
 			file >> x >> y;
-			Enemy *e = new Enemy();
+			Enemy* e = new Enemy();
 			e->setPos(x, y, this);
 			e->setSymbol("\033[31mE\033[0m");
 			enemy.push_back(e);
