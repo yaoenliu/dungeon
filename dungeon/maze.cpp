@@ -1,3 +1,11 @@
+/***********************************************************************
+ * File: maze.cpp
+ * Author: 劉耀恩
+ * Create Date: 2023/06/06
+ * Editor: 劉耀恩
+ * Update Date: 2023/06/06
+ * Description: maze generator
+***********************************************************************/
 #include "maze.h"
 #include <iostream>
 #include <vector>

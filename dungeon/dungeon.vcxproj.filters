@@ -30,6 +30,12 @@
     <ClCompile Include="Triger.cpp">
       <Filter>來源檔案</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
+    <ClCompile Include="Hero.cpp">
+      <Filter>來源檔案</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ccs.h">

@@ -1,10 +1,10 @@
 /***********************************************************************
  * File: Ccs.h
- * Author: ¼BÄ£®¦
+ * Author: åŠ‰è€€æ©
  * Create Date: 2023/04/27
- * Editor: ¼BÄ£®¦
- * Update Date: 2023/04/29
- * Description:
+ * Editor: åŠ‰è€€æ©
+ * Update Date: 2023/06/06
+ * Description: Clear Console Screen
 ***********************************************************************/
 #pragma once
 #ifndef _CCS_H_

@@ -1,10 +1,14 @@
 /***********************************************************************
- * File: maze.h
+ * File: Enemy.cpp
  * Author: 劉耀恩
  * Create Date: 2023/06/06
  * Editor: 劉耀恩
  * Update Date: 2023/06/06
- * Description: maze generator
+ * Description: Enemy class
 ***********************************************************************/
-#pragma once
-void  gen(int** board, int height, int width);
+#include "Enemy.h"
+
+void Enemy::setSymbol(string symbol)
+{
+	this->symbol = symbol; 
+}
