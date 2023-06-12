@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: maze.cpp
- * Author: 劉耀恩
+ * Author: 劉耀恩 葉祈均
  * Create Date: 2023/06/06
- * Editor: 劉耀恩
+ * Editor: 劉耀恩 葉祈均
  * Update Date: 2023/06/06
  * Description: maze generator
 ***********************************************************************/
@@ -16,6 +16,7 @@ using namespace std;
 #define U 8
 #define WALL -1
 #define NOTHING 2
+
 struct block
 {
 	int row, column, direction;
@@ -26,13 +27,19 @@ struct block
 		direction = _direction;
 	}
 };
+
 struct point
 {
 	int x;
 	int y;
 }start, end;
+
 vector<block> myblock;
 int x_num = 1, y_num = 1;//礦工位置
+
+//intent: initialize the board
+//pre: a 2D array, height and width
+//post:
 void init(int** board, int height, int width)
 {
 	//將地圖全部置為牆
@@ -45,6 +52,9 @@ void init(int** board, int height, int width)
 	x_num = y_num = 1;
 }
 
+//intent: find the block
+//pre: a 2D array, height and width
+//post:
 void FindBlock(int** board, int height, int width)
 {
 	//找出與當前位置相鄰的牆
@@ -66,6 +76,9 @@ void FindBlock(int** board, int height, int width)
 	}
 }
 
+//intent: generate the maze
+//pre: a 2D array, height and width
+//post:
 void  gen(int** board, int height, int width)
 {
 	init(board, height, width);

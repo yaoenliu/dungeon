@@ -1,8 +1,8 @@
 /***********************************************************************
  * File: Map.cpp
- * Author: 劉耀恩
+ * Author: 劉耀恩 葉祈均
  * Create Date: 2023/04/28
- * Editor: 劉耀恩
+ * Editor: 劉耀恩 葉祈均
  * Update Date: 2023/06/06
  * Description: Map class
 ***********************************************************************/
@@ -17,15 +17,27 @@
 #define Mapwallmode 1 // set to 1 if the map size includes the walls
 
 using namespace std;
+
+//intent: constructor
+//pre:
+//post:
 Map::Map()
 {
 
 }
+
+//intent: constructor
+//pre: width and height of the map
+//post:
 Map::Map(int w, int h) {
 	width = w;
 	height = h;
 	InitializeMap();
 }
+
+//intent: draw the map
+//pre:
+//post:
 void Map::draw() {
 	for (int i = 0; i < height; i++)
 	{
@@ -39,47 +51,83 @@ void Map::draw() {
 		cout << endl;
 	}
 }
+
+//intent: set the top wall of the map
+//pre: a map and a int
+//post:
 void Map::setTop(Map* m, int t)
 {
 	top = m;
 	topTrail = t;
 }
+
+//intent: set the bottom wall of the map
+//pre: a map and a int
+//post:
 void Map::setBottom(Map* m, int t)
 {
 	bottom = m;
 	bottomTrail = t;
 }
+
+//intent: set the left wall of the map
+//pre: a map and a int
+//post:
 void Map::setLeft(Map* m, int t)
 {
 	left = m;
 	leftTrail = t;
 }
+
+//intent: set the right wall of the map
+//pre: a map and a int
+//post:
 void Map::setRight(Map* m, int t)
 {
 	right = m;
 	rightTrail = t;
 }
+
+//intent: get the top wall of the map
+//pre:
+//post: return the top wall of the map
 Map* Map::getTop()
 {
 	return top;
 }
+
+//intent: get the bottom wall of the map
+//pre:
+//post: return the bottom wall of the map
 Map* Map::getBottom()
 {
 	return bottom;
 }
+
+//intent: get the left wall of the map
+//pre:
+//post: return the left wall of the map
 Map* Map::getLeft()
 {
 	return left;
 }
+
+//intent: get the right wall of the map
+//pre:
+//post: return the right wall of the map
 Map* Map::getRight()
 {
 	return right;
 }
-// Return 0 if the move is invalid
-// Return 1 if the move is valid
-// Return -1 if the move is valid and the player has moved to a new map
+
+//intent: check if the move is valid
+//pre: x and y of the move
+//post: return 0 if the move is invalid
 int Map::moveRequest(int x, int y)
 {
+	// Return 0 if the move is invalid
+	// Return 1 if the move is valid
+	// Return -1 if the move is valid and the player has moved to a new map
 	if (x == 0 && y == leftTrail)
 	{
 		return -1;
@@ -103,6 +151,10 @@ int Map::moveRequest(int x, int y)
 			return 0;
 	return 1;
 }
+
+//intent: check if the move is valid
+//pre: x and y of the move
+//post: return 0 if the move is invalid
 int Map::inRequest(int x, int y)
 {
 	if (x < 0 + Mapwallmode || x >= width - Mapwallmode || y < 0 + Mapwallmode || y >= height - Mapwallmode)
@@ -113,14 +165,26 @@ int Map::inRequest(int x, int y)
 		return false;
 
 }
+
+//intent: layout the character on the map
+//pre: a character
+//post:
 void Map::characterIn(Character* c)
 {
 	layout[c->getPos().y][c->getPos().x] = c;
 }
+
+//intent: remove the character from the map
+//pre: a character
+//post:
 void Map::characterOut(Character* c)
 {
 	layout[c->getPos().y][c->getPos().x] = nullptr;
 }
+
+//intent: initialize the map
+//pre:
+//post:
 void Map::InitializeMap()
 {
 	// Initialize the map
@@ -134,31 +198,59 @@ void Map::InitializeMap()
 		}
 	}
 }
+
+//intent: get the top trail of the map
+//pre:
+//post: return the top trail of the map
 int Map::getTopTrail()
 {
 	return topTrail;
 }
+
+//intent: get the bottom trail of the map
+//pre:
+//post: return the bottom trail of the map
 int Map::getBottomTrail()
 {
 	return bottomTrail;
 }
+
+//intent: get the left trail of the map
+//pre:
+//post: return the left trail of the map
 int Map::getLeftTrail()
 {
 	return leftTrail;
 }
+
+//intent: get the right trail of the map
+//pre:
+//post: return the right trail of the map
 int Map::getRightTrail()
 {
 	return rightTrail;
 }
+
+//intent: get the width of the map
+//pre:
+//post: return the width of the map
 int Map::getWidth()
 {
 	return width;
 }
+
+//intent: get the height of the map
+//pre:
+//post: return the height of the map
 int Map::getHeight()
 {
 	return height;
 }
 
+
+//intent: generate a maze
+//pre:
+//post:
 void Map::maze()
 {
 	int** board = new int* [height];
@@ -178,6 +270,9 @@ void Map::maze()
 	}
 }
 
+//intent: save the map
+//pre: file path, heal, exp, enemy, enemy2, hero status
+//post:
 void Map::save(string filePath, vector<Triger*> heal, vector<Triger*> exp, vector<Enemy*> enemy, vector<Enemy*> enemy2, HeroSta sta)
 {
 	system("mkdir save");
@@ -222,6 +317,9 @@ void Map::save(string filePath, vector<Triger*> heal, vector<Triger*> exp, vecto
 	file.close();
 }
 
+//intent: load the map
+//pre: file path, heal, exp, enemy, enemy2
+//post: return the hero status
 HeroSta Map::load(string filePath, vector<Triger*>& heal, vector<Triger*>& exp, vector<Enemy*>& enemy, vector<Enemy*>& enemy2)
 {
 	ifstream file;

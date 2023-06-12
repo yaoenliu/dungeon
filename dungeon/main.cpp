@@ -1,8 +1,8 @@
 ﻿/***********************************************************************
  * File: main.cpp
- * Author: 劉耀恩
+ * Author: 劉耀恩 葉祈均
  * Create Date: 2023/04/28
- * Editor: 劉耀恩
+ * Editor: 劉耀恩 葉祈均
  * Update Date: 2023/06/06
  * Description: main function
 ***********************************************************************/
@@ -47,6 +47,7 @@ vector <Triger*> trigerList;
 vector <Triger*> healList;
 vector <Enemy*> enemyList;
 vector <Enemy*> enemy2List;
+
 int  main()
 {
 	string gamefile;
@@ -202,17 +203,23 @@ int  main()
 			if (hero.getHp() <= 0)
 			{
 				cout << "You died" << endl;
+				system("pause");
 				return 886;
 			}
 			if (hero.getLevel() >= 10)
 			{
 				cout << "You win" << endl;
+				system("pause");
 				return 777;
 			}
 		}
 	}
 
 }
+
+//intent: key update
+//pre: none
+//post: keyState is updated
 void keyUpdate()
 {
 	if (_kbhit())
@@ -229,6 +236,10 @@ void keyUpdate()
 		}
 	}
 }
+
+//intent: clear console screen
+//pre: 
+//post: 
 void clearConsoleScreen()
 {
 	HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -242,6 +253,9 @@ void clearConsoleScreen()
 	SetConsoleCursorPosition(hStdOut, coord);
 }
 
+//intent: list directory contents
+//pre: a vector of string
+//post: 
 void ListDirectoryContents(vector<string>& saveList)
 {
 	saveList.clear();
@@ -259,6 +273,9 @@ void ListDirectoryContents(vector<string>& saveList)
 	}
 }
 
+//intent: draw menu
+//pre: a string array and its length
+//post: return the index of the selected item
 int menuDraw(string* menu, int length)
 {
 	int menuIndex = -1;
@@ -287,6 +304,10 @@ int menuDraw(string* menu, int length)
 		}
 	}
 }
+
+//intent: draw menu
+//pre: a string array and its length
+//post: return the index of the selected item
 int menuDraw(vector<string> menu)
 {
 	int menuIndex = -1;
@@ -316,6 +337,10 @@ int menuDraw(vector<string> menu)
 		}
 	}
 }
+
+//intent: save game
+//pre: a hero
+//post:
 void save(Hero hero)
 {
 	clearConsoleScreen();
@@ -326,6 +351,9 @@ void save(Hero hero)
 	currentMap->save("./save/" + saveName + ".sav", healList, trigerList, enemyList, enemy2List, heroSta);
 }
 
+//intent: set cursor position
+//pre: x and y
+//post:
 void setCursorPosition(int x, int y)
 {
 	static const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -335,6 +363,9 @@ void setCursorPosition(int x, int y)
 	// https://stackoverflow.com/questions/34842526/update-console-without-flickering-c
 }
 
+//intent: heal triger
+//pre: a int
+//post:
 void healT(int n)
 {
 	for (int i = 0; i < n; i++)
@@ -354,6 +385,9 @@ void healT(int n)
 	}
 }
 
+//intent: exp triger
+//pre: a int
+//post:
 void expT(int n)
 {
 	for (int i = 0; i < n; i++)
@@ -373,6 +407,9 @@ void expT(int n)
 	}
 }
 
+//intent: enemy triger
+//pre: a int
+//post:
 void eneV(int n)
 {
 	for (int i = 0; i < n; i++)
@@ -391,6 +428,10 @@ void eneV(int n)
 		enemyList.push_back(enemy);
 	}
 }
+
+//intent: enemy triger
+//pre: a int
+//post:
 void eneV2(int n)
 {
 	for (int i = 0; i < n; i++)
@@ -410,6 +451,9 @@ void eneV2(int n)
 	}
 }
 
+//intent: update screen
+//pre:
+//post:
 void updateScreen ()
 {
 	for (int i = 0; i < trigerList.size(); i++)
